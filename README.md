@@ -45,72 +45,71 @@ A sophisticated AI system that routes queries to specialized local LLM experts u
 
 1. **Clone the repository**
 
+```bash
 git clone https://github.com/nimeshk03/llm-council.git
 cd llm-council
-
-text
+```
 
 2. **Create virtual environment**
 
+```bash
 python3 -m venv venv
-source venv/bin/activate # On Windows: venv\Scripts\activate
-
-text
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+```
 
 3. **Install dependencies**
 
+```bash
 pip install -r requirements.txt
-
-text
+```
 
 4. **Pull required Ollama models**
 
+```bash
 ollama pull qwen2-math:7b-instruct
 ollama pull deepseek-coder:6.7b-instruct
 ollama pull llava:7b-v1.6
 ollama pull qwen3:8b
-
-text
+```
 
 5. **Prepare RAG database** (optional, if you have textbook PDFs)
 
-Place PDFs in data/books/
-
-python -m experts.rag_knowledge # Indexes documents
-
-text
+```bash
+# Place PDFs in data/books/
+python -m experts.rag_knowledge  # Indexes documents
+```
 
 ### Usage
 
 #### CLI Interface
 
+```bash
 python -m experts.session_manager
-
-text
+```
 
 **Example queries:**
 
+```
 You: Find the integral of x^3
 You: Implement binary search in C++
 You: Latest NVIDIA news
 You: /path/to/image.png extract text
-
-text
+```
 
 **Follow-up examples:**
 
+```
 You: Evaluate the integral x^3
 Assistant: [answers with result]
 You: Now find the derivative
 Assistant: [expands to "derivative of x^3"]
-
-text
+```
 
 #### Web Interface (Gradio)
 
+```bash
 python web_interface.py
-
-text
+```
 
 Access at:
 - **Local:** `http://localhost:7860`
@@ -118,42 +117,41 @@ Access at:
 
 ## Project Structure
 
+```
 llm-council/
 ├── experts/
-│ ├── init.py
-│ ├── supervisor.py # Expert orchestration
-│ ├── semantic_router.py # Query routing logic
-│ ├── session_manager.py # Conversation management
-│ ├── rag_knowledge.py # RAG + ChromaDB
-│ └── research_expert.py # Web search + synthesis
+│   ├── __init__.py
+│   ├── supervisor.py          # Expert orchestration
+│   ├── semantic_router.py     # Query routing logic
+│   ├── session_manager.py     # Conversation management
+│   ├── rag_knowledge.py       # RAG + ChromaDB
+│   └── research_expert.py     # Web search + synthesis
 ├── data/
-│ ├── chroma/ # Vector database (auto-generated)
-│ └── books/ # Source PDFs (optional)
+│   ├── chroma/                # Vector database (auto-generated)
+│   └── books/                 # Source PDFs (optional)
 ├── tests/
-│ └── test_vision.py # Vision model debugging
-├── web_interface.py # Gradio UI
+│   └── test_vision.py         # Vision model debugging
+├── web_interface.py           # Gradio UI
 ├── requirements.txt
 ├── .gitignore
 ├── LICENSE
 └── README.md
-
-text
+```
 
 ## Testing
 
 ### Test Individual Components
 
-Test semantic routing
-
+```bash
+# Test semantic routing
 python -m experts.semantic_router
-Test RAG knowledge base
 
+# Test RAG knowledge base
 python -m experts.rag_knowledge
-Test vision model with debug
 
+# Test vision model with debug
 python tests/test_vision.py
-
-text
+```
 
 ### Example Test Queries
 
@@ -171,38 +169,38 @@ text
 
 Edit `experts/supervisor.py`:
 
+```python
 EXPERT_MODELS = {
-ExpertType.MATH: "qwen2-math:7b-instruct",
-ExpertType.CODING: "deepseek-coder:6.7b-instruct",
-ExpertType.VISION: "llava:7b-v1.6",
-ExpertType.KNOWLEDGE: "qwen3:8b",
+    ExpertType.MATH: "qwen2-math:7b-instruct",
+    ExpertType.CODING: "deepseek-coder:6.7b-instruct",
+    ExpertType.VISION: "llava:7b-v1.6",
+    ExpertType.KNOWLEDGE: "qwen3:8b",
 }
-
-text
+```
 
 ### RAG Settings
 
 Edit `experts/rag_knowledge.py`:
 
-CHUNK_SIZE = 1000 # Characters per chunk
-CHUNK_OVERLAP = 200 # Overlap between chunks
-TOP_K_RESULTS = 4 # Number of results to retrieve
-
-text
+```python
+CHUNK_SIZE = 1000          # Characters per chunk
+CHUNK_OVERLAP = 200        # Overlap between chunks
+TOP_K_RESULTS = 4          # Number of results to retrieve
+```
 
 ### Routing Keywords
 
 Edit `experts/semantic_router.py` to customize keyword weights:
 
+```python
 self.weighted_keywords = {
-ExpertType.MATH: [
-(r'\b(integral|derivative)\b', 10.0),
-(r'\b(calculus|theorem)\b', 8.0),
-],
-# ... add more patterns
+    ExpertType.MATH: [
+        (r'\b(integral|derivative)\b', 10.0),
+        (r'\b(calculus|theorem)\b', 8.0),
+    ],
+    # ... add more patterns
 }
-
-text
+```
 
 ## Performance
 
@@ -217,47 +215,47 @@ text
 
 Use smaller quantized models:
 
+```bash
 ollama pull qwen2-math:1b
-ollama pull llava:7b # Smaller than qwen2.5vl:3b
-
-text
+ollama pull llava:7b  # Smaller than qwen2.5vl:3b
+```
 
 ### Vision Model 500 Error
 
 Check available memory:
 
-ollama ps # See what models are loaded
-Unload models to free memory
+```bash
+ollama ps  # See what models are loaded
 
-curl -X POST http://localhost:11434/api/generate
--d '{"model":"qwen3:8b","prompt":"","keep_alive":0}'
-
-text
+# Unload models to free memory
+curl -X POST http://localhost:11434/api/generate \
+  -d '{"model":"qwen3:8b","prompt":"","keep_alive":0}'
+```
 
 ### Web Search Not Working
 
 Install DuckDuckGo search package:
 
+```bash
 pip install ddgs
-
-text
+```
 
 ### ChromaDB Errors
 
 Delete and rebuild the database:
 
+```bash
 rm -rf data/chroma/
 python -m experts.rag_knowledge
-
-text
+```
 
 ### Firewall Blocking Web Interface
 
 Allow port 7860:
 
+```bash
 sudo ufw allow 7860
-
-text
+```
 
 ## Contributing
 
@@ -271,19 +269,18 @@ Contributions welcome! Please:
 
 ### Development Setup
 
-Install development dependencies
-
+```bash
+# Install development dependencies
 pip install -r requirements.txt
 pip install pytest black flake8
-Run linting
 
+# Run linting
 flake8 experts/
 black experts/
-Run tests
 
+# Run tests
 pytest tests/
-
-text
+```
 
 ## License
 
@@ -303,7 +300,7 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 ## Contact
 
-**Nimesh Kulatunga** - [@nimeshk03](https://github.com/nimeshk03)
+**Nimesh K** - [@nimeshk03](https://github.com/nimeshk03)
 
 Project Link: [https://github.com/nimeshk03/llm-council](https://github.com/nimeshk03/llm-council)
 
