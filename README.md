@@ -300,7 +300,7 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 ## Contact
 
-**Nimesh K** - [@nimeshk03](https://github.com/nimeshk03)
+**Nimesh Kulatunga** - [@nimeshk03](https://github.com/nimeshk03)
 
 Project Link: [https://github.com/nimeshk03/llm-council](https://github.com/nimeshk03/llm-council)
 
