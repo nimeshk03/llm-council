@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual Environment
+venv/
+env/
+ENV/
+.venv
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Ollama/LLM Data
+data/chroma/
+*.db
+*.sqlite
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Logs and temp files
+*.log
+*.tmp
+.cache/
+
+# Environment variables
+.env
+.env.local
+
+# Model downloads (if any)
+models/
+*.gguf
+*.bin
+
+# Test outputs
+tests/__pycache__/
+.pytest_cache/
